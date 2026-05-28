@@ -215,6 +215,29 @@ export const getUserPayload = user => ({
   image: user.image,
 });
 
+export const SENSITIVE_FIELDS = [
+  'password',
+  'ssn',
+  'ein',
+  'ip',
+  'macAddress',
+  'phone',
+  'email',
+  'address',
+  'bank',
+  'crypto',
+  'userAgent',
+  'birthDate',
+];
+
+export const removeSensitiveFields = (obj, fields = SENSITIVE_FIELDS) => {
+  const newObj = { ...obj };
+  fields.forEach(field => {
+    delete newObj[field];
+  });
+  return newObj;
+};
+
 export const generateRandomId = () => {
   const uuid = v4();
   const parts = uuid.split('-');

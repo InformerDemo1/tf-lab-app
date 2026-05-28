@@ -4,8 +4,7 @@ import {
   getMultiObjectSubset,
   getObjectSubset,
   getNestedValue,
-  limitArray,
-  sortArray,
+  removeSensitiveFields,
 } from '../utils/util.js';
 
 // get all users
@@ -25,6 +24,8 @@ export const getAllUsers = _options => {
 
   if (select) {
     users = getMultiObjectSubset(users, select);
+  } else {
+    users = users.map(u => removeSensitiveFields(u));
   }
 
   const result = { users, total, skip, limit: users.length };
@@ -56,6 +57,8 @@ export const searchUsers = ({ q: searchQuery, ..._options }) => {
 
   if (select) {
     users = getMultiObjectSubset(users, select);
+  } else {
+    users = users.map(u => removeSensitiveFields(u));
   }
 
   const result = { users, total, skip, limit: users.length };
@@ -83,6 +86,8 @@ export const filterUsers = ({ key, value, ..._options }) => {
 
   if (select) {
     users = getMultiObjectSubset(users, select);
+  } else {
+    users = users.map(u => removeSensitiveFields(u));
   }
 
   const result = { users, total, skip, limit: users.length };
@@ -96,6 +101,8 @@ export const getUserById = ({ id, select }) => {
 
   if (select) {
     user = getObjectSubset(user, select);
+  } else {
+    user = removeSensitiveFields(user);
   }
 
   return user;
@@ -204,7 +211,7 @@ export const addNewUser = ({ ...data }) => {
     role,
   };
 
-  return newUser;
+  return removeSensitiveFields(newUser);
 };
 
 // update user by id
@@ -312,7 +319,7 @@ export const updateUserById = ({ id, ...data }) => {
     role,
   };
 
-  return updatedUser;
+  return removeSensitiveFields(updatedUser);
 };
 
 // delete user by id

@@ -14,6 +14,7 @@ import {
 import authUser from '../middleware/auth.js';
 import { verifyUserHandler } from '../helpers/index.js';
 import { loginByUsernamePassword } from '../controllers/auth.js';
+import { removeSensitiveFields } from '../utils/util.js';
 
 const router = Router();
 
@@ -39,7 +40,7 @@ router.post('/login', async (req, res, next) => {
 
 // get current authenticated user
 router.get('/me', authUser, (req, res) => {
-  res.send(req.user);
+  res.send(removeSensitiveFields(req.user, ['password', 'ssn', 'ein']));
 });
 
 // search users
