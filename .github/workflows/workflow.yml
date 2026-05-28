@@ -45,6 +45,7 @@ jobs:
         PORT: 3123
         FRONTEND_URL: "http://localhost"
         JWT_SECRET: "randomstring"
+        MONGODB_URI: "mongodb://localhost:27017/dummyjson"
 
     - name: Start ZAP
       run: |
