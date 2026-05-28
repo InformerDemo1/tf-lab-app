@@ -1,9 +1,11 @@
 module.exports = {
     extends: ["plugin:security/recommended"],
     parserOptions: {
-        "ecmaVersion": 2020
+        "ecmaVersion": 2020,
+        "sourceType": "module"
     },
     env: {
-        "es6": true
+        "es6": true,
+        "node": true
     }
 };
