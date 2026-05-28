@@ -18,7 +18,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y openjdk-8-jre-headless
         pip3 install pytest pytest-xdist
-        pip3 install zapcli
+        pip3 install "urllib3<2.0" six zapcli
 
     - name: Install OWASP ZAP
       run: |
@@ -49,7 +49,11 @@ jobs:
 
     - name: Start ZAP
       run: |
-        AUTH_TOKEN=$(curl -XPOST -H 'Content-Type: application/json' "http://localhost:3123/auth/login" -d "{\"username\": \"${{ secrets.USERNAME }}\", \"password\":\"${{ secrets.PASSWORD }}\"}" | jq -r ".token")
+        USERNAME=${{ secrets.USERNAME }}
+        PASSWORD=${{ secrets.PASSWORD }}
+        if [ -z "$USERNAME" ]; then USERNAME="emilys"; fi
+        if [ -z "$PASSWORD" ]; then PASSWORD="emilyspass"; fi
+        AUTH_TOKEN=$(curl -XPOST -H 'Content-Type: application/json' "http://localhost:3123/auth/login" -d "{\"username\": \"$USERNAME\", \"password\":\"$PASSWORD\"}" | jq -r ".accessToken")
         echo "ZAP_AUTH_HEADER_VALUE=Bearer\ $AUTH_TOKEN" >> $GITHUB_ENV
         echo "ZAP_AUTH_HEADER=Authorization" >> $GITHUB_ENV
         $ZAP_PATH/zap.sh -daemon -host 0.0.0.0 -port 8090 -config api.disablekey=true &
